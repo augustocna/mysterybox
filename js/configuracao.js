@@ -55,7 +55,7 @@ const configuracao = {
     niveis: [
         // linguagem: cores do código ('python', 'lua', 'cpp' ou 'web'); cada versão pode trocar a sua
         // detalhe: texto pequeno ao lado do nome no seletor (deixe '' para não mostrar)
-        { id: 'ct2', nome: 'CT2', detalhe: '', linguagem: ['cpp', 'lua'] },
+        { id: 'ct2', nome: 'CT2', detalhe: '', linguagem: 'lua' },
         { id: 'cy1', nome: 'CY1', detalhe: '', linguagem: 'python' },
         { id: 'cy2', nome: 'CY2', detalhe: '', linguagem: 'web' },
     ],
@@ -195,6 +195,7 @@ const configuracao = {
             tipo: 'bug',
             moedas: 500,
             ct2: {
+                linguagem: 'lua',
                 codigo: 
 `
 local doces = 10
