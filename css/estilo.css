@@ -3,15 +3,16 @@
    Personalize pelas variáveis do :root
    (ou por configuracao.visual.variaveis, que tem prioridade).
 
-   Sumário
-   1. Variáveis           6. Tela das cartas     11. Efeitos
-   2. Pixel art           7. Cartas              12. Animações
-   3. Base                8. Tela de resultado   13. Pixel art (detalhes)
-   4. Componentes         9. Janela do desafio   14. Telas pequenas
-   5. Tela de início     10. Respostas
+   Nomes das classes no padrão BEM:
+     bloco             .carta
+     bloco__elemento   .carta__nome     (parte que só existe dentro do bloco)
+     bloco--variacao   .carta--virada   (estado ou versão do bloco)
+   Cada seção é um #region: o VS Code dobra e mostra o nome no minimapa.
    ========================================================= */
 
-/* ═════════ 1. VARIÁVEIS ═════════ */
+/* ============================================================ */
+/* #region 1. Variáveis */
+/* ============================================================ */
 :root {
     color-scheme: dark;
 
@@ -32,8 +33,11 @@
 
     /* Halloween */
     --cor-abobora: #FF8A1F;
+    --cor-abobora-escura: #C2560C;
     --cor-lua: #FFE8A3;
     --cor-moeda: #FFD23F;
+    --cor-moeda-borda: #9E5A00;
+    --cor-moeda-sombra: #E09A00;
     --cor-acerto: #8BE04E;
     --cor-erro: #FF3B4E;
     --cor-estrela: rgb(255 255 255 / .75);
@@ -66,12 +70,11 @@
     --altura-do-logo: clamp(28px, 7vw, 44px);
     --tamanho-da-lua: clamp(1rem, 4.5vmin, 2.3rem);
     --tamanho-do-pixel: 4px;
-    --altura-dos-controles: 2.75rem;
-    /* botões, seletor e etiquetas lado a lado têm a mesma altura */
-    --vao-entre-controles: .75rem;
-    /* espaço mínimo entre botões vizinhos */
-    --cor-verso-igual: var(--cor-marca);
-    /* cor das cartas fechadas quando versoDasCartas = 'igual' */
+    --altura-dos-controles: 2.75rem;               /* botões, seletor e etiquetas lado a lado têm a mesma altura */
+    --vao-entre-controles: .75rem;                 /* espaço mínimo entre controles vizinhos */
+    --tamanho-do-icone: 1rem;                      /* 16px: cada pixel do desenho 8x8 vira 2px */
+    --tamanho-da-cena: clamp(96px, 20vmin, 152px);
+    --cor-verso-igual: var(--cor-marca);           /* cor das cartas fechadas quando versoDasCartas = 'igual' */
 
     /* Durações (configuracao.animacoes sobrescreve) */
     --duracao-virar-carta: 320ms;
@@ -80,21 +83,36 @@
     --duracao-chuva-de-doces: 950ms;
     --duracao-trocar-tela: 250ms;
     --duracao-rapida: 140ms;
+    --duracao-cena: 5s;                            /* ciclo do fantasma saindo da caixa */
     --suavizacao: cubic-bezier(.2, .8, .2, 1);
 }
 
-/* ═════════ 2. PIXEL ART (variáveis) ═════════ */
+/* A cor da borda em pixel vale só para o elemento que a define.
+   Sem isso, a cor da janela "vazava" para todos os botões de dentro. */
+@property --cor-da-borda-pixel {
+    syntax: "*";
+    inherits: false;
+}
+
+/* #endregion */
+
+/* ============================================================ */
+/* #region 2. Pixel art (variáveis) */
+/* ============================================================ */
 .pixel-art {
     --raio: 0;
     --raio-pequeno: 0;
     --raio-pilula: 0;
     --fonte-titulo: var(--fonte-pixel);
     --suavizacao: steps(6, end);
-    --vao-entre-controles: calc(.75rem + 2 * var(--tamanho-do-pixel));
-    /* as bordas em pixel ficam do lado de fora */
+    --vao-entre-controles: calc(.75rem + 2 * var(--tamanho-do-pixel));   /* as bordas em pixel ficam do lado de fora */
 }
 
-/* ═════════ 3. BASE ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 3. Base */
+/* ============================================================ */
 *,
 *::before,
 *::after {
@@ -162,7 +180,11 @@ output {
     animation: surgir var(--duracao-trocar-tela) ease-out;
 }
 
-/* ═════════ 4. COMPONENTES ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 4. Componentes */
+/* ============================================================ */
 
 /* Marca */
 .marca {
@@ -272,9 +294,10 @@ output {
     padding: 3px;
     max-width: 100%;
     border: 1px solid var(--cor-borda);
-    border-radius: var(--raio-pilula);
+    border-radius: var(--raio-pequeno);
     background: var(--cor-superficie);
 }
+
 
 .seletor__opcao {
     flex: 1;
@@ -346,21 +369,41 @@ output {
     --cor-de-aviso: var(--cor-lua);
 }
 
+
+
+/* Ícones em pixel art (preenchidos pelo JS a partir de data-icone) */
+.icone {
+    display: inline-block;
+    flex: none;
+    width: var(--tamanho-do-icone);
+    height: var(--tamanho-do-icone);
+    vertical-align: -.15em;
+}
+
+.icone svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
 /* Etiquetas */
 .etiqueta {
     display: inline-flex;
     align-items: center;
-    gap: .3em;
+    gap: .5em;
     min-height: var(--altura-dos-controles);
     padding: 0 .9em;
+    border: 2px solid var(--cor-borda);
     border-radius: var(--raio-pilula);
-    background: var(--cor-superficie-clara);
+    background: var(--cor-superficie);
     font-weight: 900;
     font-size: .85rem;
+    line-height: 1.2;
     white-space: nowrap;
 }
 
 .etiqueta--tipo {
+    border-color: var(--tipo);
     background: var(--tipo);
     color: var(--cor-texto-sobre-cor);
 }
@@ -369,7 +412,11 @@ output {
     color: var(--cor-moeda);
 }
 
-/* ═════════ 5. TELA DE INÍCIO ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 5. Tela de início */
+/* ============================================================ */
 .tela-inicio {
     display: grid;
     place-items: center;
@@ -385,12 +432,34 @@ output {
     text-align: center;
 }
 
-.inicio__fantasma {
-    width: clamp(64px, 20vmin, 140px);
+/* Cena: fantasma saindo da caixa. O SVG é montado em js (criarCenaDaCaixa). */
+.cena-caixa {
+    width: var(--tamanho-da-cena);
+    filter: drop-shadow(0 0 22px color-mix(in srgb, var(--cor-lua) 30%, transparent));
+}
+
+.cena-caixa svg {
+    display: block;
+    width: 100%;
     height: auto;
-    image-rendering: pixelated;
-    filter: drop-shadow(0 0 22px color-mix(in srgb, var(--cor-lua) 35%, transparent));
-    animation: flutuar 1s steps(2, end) infinite alternate;
+    overflow: visible;
+}
+
+.cena-caixa g {
+    transform-box: fill-box;
+}
+
+.cena-caixa__tudo {
+    animation: cena-tremer var(--duracao-cena) linear infinite;
+}
+
+.cena-caixa__tampa {
+    transform-origin: left bottom;
+    animation: cena-tampa var(--duracao-cena) var(--suavizacao) infinite;
+}
+
+.cena-caixa__fantasma {
+    animation: cena-fantasma var(--duracao-cena) var(--suavizacao) infinite;
 }
 
 .inicio__titulo {
@@ -452,7 +521,11 @@ output {
     letter-spacing: .04em;
 }
 
-/* ═════════ 6. TELA DAS CARTAS ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 6. Tela das cartas */
+/* ============================================================ */
 .tela-cartas {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
@@ -472,13 +545,8 @@ output {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: .3rem 1rem;
+    gap: var(--vao-entre-controles);
     padding-right: calc(var(--tamanho-da-lua) * 2.6);
-    font-weight: 800;
-}
-
-.placar-ao-vivo__moedas {
-    color: var(--cor-moeda);
 }
 
 .barra__acoes {
@@ -514,47 +582,21 @@ output {
     padding: var(--espaco) var(--espaco-duplo);
 }
 
-/* .tabuleiro {
-    --colunas: 6;
-    --linhas: round(up, calc(var(--quantidade, 6) / var(--colunas)), 1);
+/* O JS (Tabuleiro.ajustarTamanho) calcula --colunas e --largura-da-carta para caber na tela */
+.tabuleiro {
     --vao: clamp(.6rem, 2.5cqmin, 1.4rem);
-    
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--vao);
-    width: min(100cqw, 980px, max(calc((100cqh - (var(--linhas) - 1) * var(--vao)) / var(--linhas) * 3 / 4 * var(--colunas) + (var(--colunas) - 1) * var(--vao)),
-                min(100cqw, 200px)));
-} */
+    width: calc(var(--colunas, 3) * var(--largura-da-carta, 160px) + (var(--colunas, 3) - 1) * var(--vao));
+    max-width: 100%;
+}
 
-/* .tabuleiro>.carta {
+.tabuleiro > .carta {
     flex: none;
-    width: calc((100% - (var(--colunas) - 1) * var(--vao)) / var(--colunas) - .1px);
-} */
-
-.tabuleiro {
-  --vao: clamp(.6rem, 2.5cqmin, 1.4rem);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--vao);
-  width: calc(var(--colunas, 3) * var(--largura-da-carta, 160px) + (var(--colunas, 3) - 1) * var(--vao));
-  max-width: 100%;
+    width: var(--largura-da-carta, 160px);
 }
-.tabuleiro > .carta { flex: none; width: var(--largura-da-carta, 160px); }
-
-/* @container (max-aspect-ratio: 3/4) {
-    .tabuleiro {
-        --colunas: 2;
-    }
-}
-
-@container (max-width: 210px) {
-    .tabuleiro {
-        --colunas: 1;
-        width: 100cqw;
-    }
-} */
 
 .legenda {
     display: flex;
@@ -580,7 +622,11 @@ output {
     box-shadow: 0 0 8px var(--tipo);
 }
 
-/* ═════════ 7. CARTAS ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 7. Cartas */
+/* ============================================================ */
 .carta {
     position: relative;
     aspect-ratio: 3 / 4;
@@ -699,7 +745,11 @@ output {
     translate: none;
 }
 
-/* ═════════ 8. TELA DE RESULTADO ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 8. Tela de resultado */
+/* ============================================================ */
 .tela-resultado {
     display: grid;
     place-items: center;
@@ -811,7 +861,11 @@ output {
     gap: var(--vao-entre-controles);
 }
 
-/* ═════════ 9. JANELA DO DESAFIO ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 9. Janela do desafio */
+/* ============================================================ */
 .janela {
     position: fixed;
     inset: 0;
@@ -840,19 +894,33 @@ output {
     background: rgb(8 4 14 / .8);
 }
 
+/* Duas colunas: etiquetas (quebram linha à vontade) e o X, sempre no canto */
 .janela__barra {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
     gap: var(--vao-entre-controles);
-    padding: .6rem var(--espaco);
-    padding-top: max(.6rem, env(safe-area-inset-top, 0));
+    padding: calc(.6rem + var(--tamanho-do-pixel)) calc(var(--espaco) + var(--tamanho-do-pixel));
+    padding-top: max(calc(.6rem + var(--tamanho-do-pixel)), env(safe-area-inset-top, 0));
     border-bottom: 2px solid var(--tipo);
     background: var(--cor-superficie);
 }
 
+.janela__etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--vao-entre-controles);
+    min-width: 0;
+}
+
+.janela__etiquetas .etiqueta {
+    max-width: 100%;
+    white-space: normal;
+}
+
 .janela__fechar {
-    margin-left: auto;
+    --tamanho-do-icone: 1rem;
 }
 
 .janela__corpo {
@@ -966,7 +1034,11 @@ output {
     color: var(--cor-realce-etiqueta);
 }
 
-/* ═════════ 10. RESPOSTAS ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 10. Respostas */
+/* ============================================================ */
 .campo {
     display: flex;
     flex-direction: column;
@@ -1100,7 +1172,11 @@ output {
     font-weight: 900;
 }
 
-/* ═════════ 11. EFEITOS ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 11. Efeitos */
+/* ============================================================ */
 .doce {
     position: fixed;
     left: 50%;
@@ -1127,13 +1203,13 @@ output {
     animation: piscar-vermelho var(--duracao) linear both;
 }
 
-.susto img {
+.susto__imagem {
     width: min(80vw, 80vh);
     height: auto;
     animation: aparecer-fantasma var(--duracao) cubic-bezier(.2, 1.4, .4, 1) both;
 }
 
-.susto img.pixelada {
+.susto__imagem--pixelada {
     image-rendering: pixelated;
 }
 
@@ -1141,7 +1217,11 @@ output {
     animation: tremer 300ms;
 }
 
-/* ═════════ 12. ANIMAÇÕES ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 12. Animações */
+/* ============================================================ */
 @keyframes surgir {
     from {
         opacity: 0;
@@ -1169,9 +1249,42 @@ output {
     }
 }
 
-@keyframes flutuar {
-    to {
-        translate: 0 -8px;
+/* Cena da caixa: treme, a tampa abre, o fantasma sobe, flutua e volta */
+@keyframes cena-tremer {
+    0%, 6%, 16%, 100% {
+        transform: none;
+    }
+
+    8%, 12% {
+        transform: translateX(-1px);
+    }
+
+    10%, 14% {
+        transform: translateX(1px);
+    }
+}
+
+@keyframes cena-tampa {
+    0%, 18%, 86%, 100% {
+        transform: none;
+    }
+
+    24%, 78% {
+        transform: translate(-1px, -5px) rotate(-14deg);
+    }
+}
+
+@keyframes cena-fantasma {
+    0%, 20%, 82%, 100% {
+        transform: translateY(var(--subida));
+    }
+
+    36%, 58% {
+        transform: translateY(0);
+    }
+
+    47%, 69% {
+        transform: translateY(-2px);
     }
 }
 
@@ -1250,8 +1363,12 @@ output {
     }
 }
 
-/* ═════════ 13. PIXEL ART (detalhes) ═════════
-   Bordas recortadas em "degrau" feitas com sombras. */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 13. Pixel art (detalhes) */
+/* ============================================================ */
+/* Bordas recortadas em "degrau" feitas com sombras. */
 .pixel-art .botao,
 .pixel-art .seletor,
 .pixel-art .carta__face,
@@ -1348,7 +1465,6 @@ output {
 .pixel-art .painel__rotulo,
 .pixel-art .marca__texto,
 .pixel-art .placar__item span,
-.pixel-art .placar-ao-vivo,
 .pixel-art .opcoes--duas .opcao {
     font-family: var(--fonte-pixel);
     font-weight: 400;
@@ -1397,7 +1513,11 @@ output {
     animation-timing-function: steps(3, end);
 }
 
-/* ═════════ 14. TELAS PEQUENAS ═════════ */
+/* #endregion */
+
+/* ============================================================ */
+/* #region 14. Telas pequenas e acessibilidade */
+/* ============================================================ */
 @media (max-width: 380px) {
     .linha-de-codigo {
         width: auto;
@@ -1407,11 +1527,10 @@ output {
 }
 
 @media (max-width: 520px) {
-    .barra .seletor__opcao small {
+    .barra .seletor__opcao small,
+    .etiqueta__rotulo {
         display: none;
     }
-
-    /* na barra das cartas, só CY1 e CY2 */
 }
 
 @media (max-width: 300px) {
@@ -1455,8 +1574,8 @@ output {
         display: none;
     }
 
-    .inicio__fantasma {
-        width: clamp(48px, 14vmin, 80px);
+    .cena-caixa {
+        --tamanho-da-cena: clamp(64px, 18vmin, 104px);
     }
 }
 
@@ -1469,7 +1588,11 @@ output {
         translate: none;
     }
 
-    .inicio__fantasma {
-        animation: none;
+    /* congela a cena no momento em que o fantasma está fora da caixa */
+    .cena-caixa g {
+        animation-delay: calc(var(--duracao-cena) * -.5);
+        animation-play-state: paused;
     }
 }
+
+/* #endregion */

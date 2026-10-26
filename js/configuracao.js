@@ -27,6 +27,8 @@
      imagem       mostra uma imagem no lugar do código: 'assets/desafios/bug.png'
      moedas       moedas só desta versão (senão vale o do desafio)
      explicacao   aparece depois da resposta
+     linguagem    cores do código só desta versão (senão vale a do nível)
+                  'python', 'lua', 'cpp' (C++ e Arduino) ou 'web' (HTML, CSS e JS)
 
    O código pode ser escrito com recuo; o site ajusta sozinho.
    Se o código tiver ${ ou crase, escreva \${ ou \`.
@@ -34,7 +36,9 @@
 
 const configuracao = {
 
-    /* ─────────────── SITE ─────────────── */
+    //==========================================================
+    // #region Site
+    //==========================================================
     site: {
         titulo: 'Halloween Mystery Box',
         subtitulo: 'Escolha uma carta, se tiver coragem.',
@@ -43,15 +47,25 @@ const configuracao = {
         botaoIniciar: 'Start',
     },
 
-    /* ─────────────── NÍVEIS ─────────────── */
+    // #endregion
+
+    //==========================================================
+    // #region Níveis
+    //==========================================================
     niveis: [
-        { id: 'ct2', nome: 'CT2', detalhe: '', linguagem: 'Lua, C++'},
+        // linguagem: cores do código ('python', 'lua', 'cpp' ou 'web'); cada versão pode trocar a sua
+        // detalhe: texto pequeno ao lado do nome no seletor (deixe '' para não mostrar)
+        { id: 'ct2', nome: 'CT2', detalhe: '', linguagem: 'C++, Lua' },
         { id: 'cy1', nome: 'CY1', detalhe: '', linguagem: 'python' },
         { id: 'cy2', nome: 'CY2', detalhe: '', linguagem: 'web' },
     ],
     nivelInicial: 'ct2',
 
-    /* ─────────────── RODADA ─────────────── */
+    // #endregion
+
+    //==========================================================
+    // #region Rodada
+    //==========================================================
     rodada: {
         desafiosPorPadrao: 1,              // valor inicial do seletor na tela de início
         moedasPorPadrao: 500,              // usado quando o desafio não informa moedas
@@ -59,10 +73,14 @@ const configuracao = {
         mostrarRespostaAoErrar: true,
         mostrarExplicacao: true,
         // Aparece no resultado só quando a turma erra todos os desafios
-        mensagemDeParticipacao: '🎁 Vocês ganharam o prêmio de participação!',
+        mensagemDeParticipacao: '🎁 Prêmio de participação!',
     },
 
-    /* ─────────────── VISUAL ─────────────── */
+    // #endregion
+
+    //==========================================================
+    // #region Visual
+    //==========================================================
     visual: {
         pixelArt: true,                    // liga ou desliga o estilo pixel art
         realceDeCodigo: true,
@@ -72,19 +90,27 @@ const configuracao = {
         embaralharOpcoes: true,
         variaveis: {                       // sobrescreve variáveis do :root do css/estilo.css
             // '--cor-marca': '#E2001A',
-            '--colunas': '5',
+            // '--colunas': '5',
         },
     },
 
-    /* ─────────────── FONTES ───────────────
-       Vêm do Google Fonts quando há internet. Sem internet, o CSS usa as do sistema. */
+    // #endregion
+
+    //==========================================================
+    // #region Fontes
+    //==========================================================
+    // Vêm do Google Fonts quando há internet. Sem internet, o CSS usa as do sistema.
     fontes: {
         usarGoogleFonts: true,
         familias: ['Nunito:wght@400;700;800;900', 'Creepster'],
         familiasPixelArt: ['Press Start 2P'],
     },
 
-    /* ─────────────── ANIMAÇÕES (milissegundos, no máximo 1000) ─────────────── */
+    // #endregion
+
+    //==========================================================
+    // #region Animações (milissegundos, no máximo 1000)
+    //==========================================================
     animacoes: {
         virarCarta: 320,
         abrirDesafio: 260,
@@ -93,7 +119,11 @@ const configuracao = {
         trocarTela: 250,
     },
 
-    /* ─────────────── ACERTO ─────────────── */
+    // #endregion
+
+    //==========================================================
+    // #region Acerto
+    //==========================================================
     acerto: {
         mensagem: 'Acertou!',
         emojis: ['🍬', '🍭', '🍫', '🪙', '🪙', '🎃'],
@@ -103,7 +133,11 @@ const configuracao = {
         velocidade: 1,
     },
 
-    /* ─────────────── JUMPSCARE ─────────────── */
+    // #endregion
+
+    //==========================================================
+    // #region Jumpscare
+    //==========================================================
     jumpscare: {
         ativo: true,
         mensagem: 'BUUU! Não foi dessa vez.',
@@ -119,8 +153,12 @@ const configuracao = {
         flashVermelho: true,
     },
 
-    /* ─────────────── TIPOS ───────────────
-       formato: 'linha' (digita a linha), 'escolha' (opções) ou 'verdadeiroOuFalso' */
+    // #endregion
+
+    //==========================================================
+    // #region Tipos
+    //==========================================================
+    // formato: 'linha' (digita a linha), 'escolha' (opções) ou 'verdadeiroOuFalso'
     tipos: {
         bug: { 
             nome: 'Ache o bug', 
@@ -147,7 +185,11 @@ const configuracao = {
         },
     },
 
-    /* ─────────────── DESAFIOS ─────────────── */
+    // #endregion
+
+    //==========================================================
+    // #region Desafios
+    //==========================================================
     desafios: [
         {
             tipo: 'bug',
@@ -163,7 +205,7 @@ else
 end   
 `,
                 linha: 2,
-                explicacao: 'Usou-se operador de atribuicao = ao invés do operador de comparação ==',
+                explicacao: 'Usou-se o operador de atribuição = em vez do operador de comparação ==.',
             },
             cy1: {
                 codigo: 
@@ -173,7 +215,7 @@ doces /= 2
 doces = doces - 3
 print("Doces restantes:" doces)
 `,
-                linha: 3,
+                linha: 4,
                 explicacao: 'Falta a vírgula entre o texto e a variável dentro do print.',
             },
 
@@ -196,6 +238,7 @@ print("Doces restantes:" doces)
             tipo: 'bug',
             moedas: 500,
             ct2: {
+                linguagem: 'cpp',
                 codigo: 
 `
 int fantasma = analogRead(A1);
@@ -207,7 +250,7 @@ else {
 }
 `,
                 linha: 6,
-                explicacao: 'Faltou a virgula , depois do 6 para separar os dois argumentos da função digitalWrite',
+                explicacao: 'Faltou a vírgula depois do 6 para separar os dois argumentos da função digitalWrite.',
             },
             cy1: {
                 codigo: 
@@ -245,14 +288,14 @@ function assustar() {
 `
 local fantasmas = 2
 fantasmas = fantasmas * 2
-fantasmas -= 7
-fantasmas /= 382433
+fantasmas = fantasmas - 7
+fantasmas = fantasmas / 382433
 fantasmas = 10
 print(fantasmas)
 `,
                 opcoes: ['3.9998169614023893', '10', '7'],
                 correta: '10',
-                explicacao: 'Na linha 5 a variável fantasmas passa a guardar o valor 10',
+                explicacao: 'Na linha 5 a variável fantasmas passa a guardar o valor 10.',
             },
             cy1: {
                 codigo: 
@@ -277,7 +320,7 @@ alert(doces + fantasmas);
 `,
                 opcoes: ['13', '6', 'Erro'],
                 correta: '13',
-                explicacao: 'Como b é texto, o + junta os dois em vez de somar.',
+                explicacao: 'Como fantasmas é texto, o + junta os dois em vez de somar: 1 e "3" viram "13".',
             },
         },
 
@@ -285,6 +328,7 @@ alert(doces + fantasmas);
             tipo: 'saida',
             moedas: 400,
             ct2: {
+                linguagem: 'cpp',
                 codigo: 
 `
 int portaFantasma = 6;
@@ -296,7 +340,7 @@ void setup() {
 `,
                 opcoes: ['6', 'OUTPUT', '9600'],
                 correta: '6',
-                explicacao: 'Na linha 5 o método Serial.println() imprime o valor da variável portaFantasma, que é 6',
+                explicacao: 'Na linha 5, Serial.println() imprime o valor da variável portaFantasma, que é 6.',
             },
             cy1: {
                 codigo: 
@@ -307,7 +351,7 @@ print(doces[1])
 `,
                 opcoes: ['paçoca', 'chocolate', 'jujuba'],
                 correta: 'jujuba',
-                explicacao: 'Em Python, o método .sort() organiza a lista em ordem alfabetica e o indice 1 acessa o segundo elemento: jujuba',
+                explicacao: 'Em Python, o método .sort() organiza a lista em ordem alfabética e o índice 1 acessa o segundo elemento: jujuba.',
             },
             cy2: {
                 pergunta: 'O que o alert mostra?',
@@ -339,7 +383,7 @@ alert(doces);
                 explicacao: 'Em doces = 10, o pote chamado doces guarda o valor 10.',
             },
             cy2: {
-                afirmacao: 'No CSS, o ponto (.) seleciona um elemento pelo id. como .campo-de-busca',
+                afirmacao: 'No CSS, o ponto (.) seleciona um elemento pelo id, como em .campo-de-busca.',
                 resposta: false,
                 explicacao: 'O ponto seleciona uma classe. Para id, usa-se #.',
             },
@@ -349,20 +393,21 @@ alert(doces);
             tipo: 'verdadeiroOuFalso',
             moedas: 300,
             ct2: {
-                afirmacao: 'O comando if serve para realizar um bloco instruções apenas se uma condição for satisfeita.',
+                afirmacao: 'O comando if serve para executar um bloco de instruções apenas se uma condição for satisfeita.',
                 resposta: true,
                 explicacao: 'Quem escolhe caminhos é o if. O for repete comandos.',
             },
             cy1: {
-                afirmacao: 'O comando if serve para realizar um bloco instruções apenas se uma condição for satisfeita.',
+                afirmacao: 'O comando if serve para executar um bloco de instruções apenas se uma condição for satisfeita.',
                 resposta: true,
                 explicacao: 'Quem escolhe caminhos é o if. O for repete comandos.',
             },
             cy2: {
-                afirmacao: 'De forma simplificada, O HTML organiza o conteúdo, o CSS cuida da aparência e o JS dá comportamento à página.',
+                afirmacao: 'De forma simplificada, o HTML organiza o conteúdo, o CSS cuida da aparência e o JS dá comportamento à página.',
                 resposta: true,
                 explicacao: 'São as três camadas de uma página web.',
             },
         },
     ],
+    // #endregion
 };

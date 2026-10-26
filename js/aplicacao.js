@@ -7,17 +7,22 @@
    - Tudo que guarda estado é uma classe, só com métodos comuns.
    - Funções de seta aparecem apenas como callback (eventos, map, forEach).
    - O JavaScript encontra os elementos da página pelos atributos data-*.
+   - Cada seção é um #region: o VS Code dobra e mostra o nome no minimapa.
 
    Sumário
-   1. Utilitários          5. Sons e efeitos      9. Rodada
-   2. Desenho e código     6. Respostas          10. Seletores
-   3. Preparação           7. Janela do desafio  11. Jogo
-   4. Tema                 8. Cartas e tabuleiro
+    1. Utilitários           7. Respostas
+    2. Pixel art e ícones    8. Janela do desafio
+    3. Código                9. Cartas e tabuleiro
+    4. Preparação           10. Rodada
+    5. Tema                 11. Seletores
+    6. Sons e efeitos       12. Jogo
    ========================================================= */
 (function () {
     'use strict';
 
-    /* ═════════ 1. UTILITÁRIOS ═════════ */
+    //==============================================================
+    // #region 1. Utilitários
+    //==============================================================
 
     function buscar(seletor, raiz = document) {
         return raiz.querySelector(seletor);
@@ -106,52 +111,211 @@
         elemento.classList.add(classe);
     }
 
-    /* ═════════ 2. DESENHO E CÓDIGO ═════════ */
+    // #endregion
 
-    function desenharPixelArt(linhas, paleta) {
+    //==============================================================
+    // #region 2. Pixel art e ícones
+    //==============================================================
+    // Todo desenho é uma grade de texto: cada letra vira uma cor da paleta e '.' fica vazio.
+    // As paletas usam variáveis do CSS, então os desenhos acompanham o tema.
+
+    const DESENHOS = {
+        fantasma: [
+            '......XXXX......',
+            '....XXXXXXXX....',
+            '...XXXXXXXXXX...',
+            '..XXXXXXXXXXXX..',
+            '..XXOOXXXXOOXX..',
+            '.XXOOOOXXOOOOXX.',
+            '.XXORROXXORROXX.',
+            '.XXXOOXXXXOOXXX.',
+            '.XXXXXXXXXXXXXX.',
+            '.XXXXXOOOOXXXXX.',
+            '.XXXXOOOOOOXXXX.',
+            '.XXXXOOOOOOXXXX.',
+            '.XXXXXOOOOXXXXX.',
+            '.XXXXXXXXXXXXXX.',
+            '.XX..XXX..XXX.XX',
+            '.X....X....X...X',
+        ],
+        morcego: [
+            'O.....O.O.....O',
+            'OO....OOO....OO',
+            'OOO..ORORO..OOO',
+            'OOOOOOOOOOOOOOO',
+            '.OOOOOOOOOOOOO.',
+            '..OOO.OOO.OOO..',
+            '...O...O...O...',
+        ],
+        moeda: [
+            '..OOOO..',
+            '.OYYYYO.',
+            'OYLYYYSO',
+            'OYLYYYSO',
+            'OYYYYYSO',
+            'OYYYYSSO',
+            '.OSSSSO.',
+            '..OOOO..',
+        ],
+        fechar: [
+            'XX...XX',
+            'XXX.XXX',
+            '.XXXXX.',
+            '..XXX..',
+            '.XXXXX.',
+            'XXX.XXX',
+            'XX...XX',
+        ],
+    };
+
+    const PALETAS = {
+        // a imagem do susto vira arquivo (data URI), que não lê variáveis do CSS
+        fantasmaDoSusto: { X: '#F4EEE3', O: '#150E22', R: '#E2001A' },
+        cena: {
+            X: 'var(--cor-texto)', O: 'var(--cor-fundo)', R: 'var(--cor-marca)',
+            C: 'var(--cor-abobora)', S: 'var(--cor-abobora-escura)', L: 'var(--cor-lua)', I: 'var(--cor-codigo-fundo)',
+        },
+        moeda: { O: 'var(--cor-moeda-borda)', Y: 'var(--cor-moeda)', L: 'var(--cor-lua)', S: 'var(--cor-moeda-sombra)' },
+        fechar: { X: 'currentColor' },
+    };
+
+    function medirGrade(grade) {
+        return { largura: Math.max(...grade.map((linha) => linha.length)), altura: grade.length };
+    }
+
+    /** Junta pixels vizinhos da mesma cor num retângulo só, para o SVG ficar leve. */
+    function desenharRetangulos(grade, paleta) {
         let retangulos = '';
-        linhas.forEach((linha, y) => {
+        grade.forEach((linha, y) => {
             let x = 0;
             while (x < linha.length) {
                 let largura = 1;
                 while (linha[x + largura] === linha[x]) largura++;
                 const cor = paleta[linha[x]];
-                if (cor) retangulos += `<rect x="${x}" y="${y}" width="${largura}" height="1" fill="${cor}"/>`;
+                if (cor) retangulos += `<rect x="${x}" y="${y}" width="${largura}" height="1" style="fill:${cor}"/>`;
                 x += largura;
             }
         });
-        const largura = Math.max(...linhas.map((linha) => linha.length));
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${largura} ${linhas.length}" shape-rendering="crispEdges">${retangulos}</svg>`;
-        return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+        return retangulos;
     }
 
-    const FANTASMA = desenharPixelArt([
-        '......XXXX......',
-        '....XXXXXXXX....',
-        '...XXXXXXXXXX...',
-        '..XXXXXXXXXXXX..',
-        '..XXOOXXXXOOXX..',
-        '.XXOOOOXXOOOOXX.',
-        '.XXORROXXORROXX.',
-        '.XXXOOXXXXOOXXX.',
-        '.XXXXXXXXXXXXXX.',
-        '.XXXXXOOOOXXXXX.',
-        '.XXXXOOOOOOXXXX.',
-        '.XXXXOOOOOOXXXX.',
-        '.XXXXXOOOOXXXXX.',
-        '.XXXXXXXXXXXXXX.',
-        '.XX..XXX..XXX.XX',
-        '.X....X....X...X',
-    ], { X: '#F4EEE3', O: '#150E22', R: '#E2001A' });
+    function criarSvgPixelArt(grade, paleta) {
+        const { largura, altura } = medirGrade(grade);
+        return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${largura} ${altura}" shape-rendering="crispEdges" aria-hidden="true" focusable="false">${desenharRetangulos(grade, paleta)}</svg>`;
+    }
+
+    function criarImagemPixelArt(grade, paleta) {
+        return `data:image/svg+xml,${encodeURIComponent(criarSvgPixelArt(grade, paleta))}`;
+    }
+
+    /** Cria uma grade chamando pintar(x, y) para cada pixel. */
+    function criarGrade(largura, altura, pintar) {
+        return Array.from({ length: altura }, (_, y) =>
+            Array.from({ length: largura }, (_, x) => pintar(x, y)).join(''));
+    }
+
+    /** Copia o desenho por cima da grade a partir de (coluna, linha). O '.' do desenho não apaga nada. */
+    function carimbar(grade, desenho, coluna, linha) {
+        return grade.map((texto, y) => {
+            const trecho = desenho[y - linha];
+            if (!trecho) return texto;
+            return [...texto].map((pixel, x) => {
+                const novo = trecho[x - coluna];
+                return novo && novo !== '.' ? novo : pixel;
+            }).join('');
+        });
+    }
+
+    /** Retângulo com contorno: 'O' na borda, preenchimento decidido por miolo(x, y). */
+    function desenharCaixote(largura, altura, miolo) {
+        return criarGrade(largura, altura, (x, y) => {
+            const naBorda = x === 0 || y === 0 || x === largura - 1 || y === altura - 1;
+            return naBorda ? 'O' : miolo(x, y);
+        });
+    }
+
+    function desenharGrupo(classe, grade, x, y) {
+        return `<g class="${classe}"><g transform="translate(${x} ${y})">${desenharRetangulos(grade, PALETAS.cena)}</g></g>`;
+    }
+
+    /**
+     * Tela inicial: caixa com morcego e o fantasma saindo de dentro.
+     * Camadas, de trás para frente: boca da caixa, tampa, fantasma e frente da caixa.
+     * As posições saem do tamanho dos desenhos, então trocar um desenho não quebra a cena.
+     */
+    function criarCenaDaCaixa() {
+        const { fantasma, morcego } = DESENHOS;
+        const tamanhoDoFantasma = medirGrade(fantasma);
+        const tamanhoDoMorcego = medirGrade(morcego);
+
+        const larguraDaCaixa = tamanhoDoMorcego.largura + 12;   // ímpar + par = morcego centralizado
+        const alturaDaFrente = tamanhoDoMorcego.altura + 8;
+        const larguraDaCena = larguraDaCaixa + 2;               // a tampa sobra um pixel de cada lado
+        const topoDaFrente = tamanhoDoFantasma.altura + 6;      // espaço para o fantasma sair inteiro
+        const alturaDaCena = topoDaFrente + alturaDaFrente;
+
+        const frente = carimbar(
+            desenharCaixote(larguraDaCaixa, alturaDaFrente, (x, y) => {
+                if (y === 1) return 'L';
+                return y >= alturaDaFrente - 4 ? 'S' : 'C';
+            }),
+            morcego,
+            (larguraDaCaixa - tamanhoDoMorcego.largura) / 2,
+            Math.floor((alturaDaFrente - tamanhoDoMorcego.altura) / 2),
+        );
+        const boca = desenharCaixote(larguraDaCaixa, 3, () => 'I');
+        const tampa = desenharCaixote(larguraDaCena, 4, (x, y) => (y === 1 ? 'L' : 'C'));
+        const fantasmaX = Math.floor((larguraDaCena - tamanhoDoFantasma.largura) / 2);
+        const fantasmaY = topoDaFrente - tamanhoDoFantasma.altura + 2;   // a cauda fica atrás da frente
+
+        return `<svg viewBox="0 0 ${larguraDaCena} ${alturaDaCena}" shape-rendering="crispEdges" style="--subida: ${tamanhoDoFantasma.altura}px" aria-hidden="true" focusable="false">
+            <defs><clipPath id="recorte-da-caixa"><rect width="${larguraDaCena}" height="${alturaDaCena}"/></clipPath></defs>
+            <g class="cena-caixa__tudo">
+                ${desenharGrupo('cena-caixa__boca', boca, 1, topoDaFrente - 3)}
+                ${desenharGrupo('cena-caixa__tampa', tampa, 0, topoDaFrente - 4)}
+                <g clip-path="url(#recorte-da-caixa)">${desenharGrupo('cena-caixa__fantasma', fantasma, fantasmaX, fantasmaY)}</g>
+                ${desenharGrupo('cena-caixa__frente', frente, 1, topoDaFrente)}
+            </g>
+        </svg>`;
+    }
+
+    const FANTASMA = criarImagemPixelArt(DESENHOS.fantasma, PALETAS.fantasmaDoSusto);
+
+    const ICONES = {
+        moeda: criarSvgPixelArt(DESENHOS.moeda, PALETAS.moeda),
+        fechar: criarSvgPixelArt(DESENHOS.fechar, PALETAS.fechar),
+    };
+
+    /** Preenche todo elemento com data-icone="nome" usando o desenho de ICONES. */
+    function preencherIcones(raiz = document) {
+        for (const elemento of buscarTodos('[data-icone]', raiz)) {
+            elemento.innerHTML = ICONES[elemento.dataset.icone] ?? '';
+        }
+    }
+
+    // #endregion
+
+    //==============================================================
+    // #region 3. Código
+    //==============================================================
 
     const REGRAS_DE_REALCE = {
         python: /(?<comentario>#.*)|(?<texto>"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(?<numero>\b\d+(?:\.\d+)?\b)|(?<palavra>[A-Za-z_]\w*)/g,
+        lua: /(?<comentario>--.*)|(?<texto>"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(?<numero>\b\d+(?:\.\d+)?\b)|(?<palavra>[A-Za-z_]\w*)/g,
+        cpp: /(?<comentario>\/\/.*|\/\*.*?\*\/)|(?<texto>"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(?<numero>\b\d+(?:\.\d+)?\b)|(?<palavra>[A-Za-z_]\w*)/g,
         web: /(?<comentario>\/\/.*|\/\*.*?\*\/|<!--.*?-->)|(?<texto>"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`[^`]*`)|(?<etiqueta><\/?[A-Za-z][\w-]*|\/?>)|(?<numero>\b\d+(?:\.\d+)?)|(?<palavra>[A-Za-z_$][\w$-]*)/g,
     };
 
     const PALAVRAS_RESERVADAS = new Set([
+        // Python
         'if', 'elif', 'else', 'for', 'while', 'in', 'not', 'and', 'or', 'def', 'return', 'import', 'from',
         'print', 'range', 'len', 'input', 'int', 'str', 'True', 'False', 'None',
+        // Lua
+        'local', 'then', 'do', 'end', 'elseif', 'repeat', 'until', 'nil',
+        // C++ e Arduino
+        'void', 'float', 'char', 'bool', 'Serial', 'OUTPUT', 'INPUT', 'HIGH', 'LOW',
+        'pinMode', 'digitalWrite', 'digitalRead', 'analogRead', 'analogWrite', 'delay',
+        // JavaScript
         'let', 'const', 'var', 'function', 'true', 'false', 'null', 'undefined', 'new', 'alert', 'console', 'document',
     ]);
 
@@ -189,7 +353,11 @@
         return bloco;
     }
 
-    /* ═════════ 3. PREPARAÇÃO E CONFERÊNCIA DOS DESAFIOS ═════════ */
+    // #endregion
+
+    //==============================================================
+    // #region 4. Preparação dos desafios
+    //==============================================================
 
     const FORMATOS = ['linha', 'escolha', 'verdadeiroOuFalso'];
 
@@ -233,7 +401,7 @@
             pergunta: dados.pergunta ?? dados.afirmacao ?? tipo.pergunta,
             codigo: dados.codigo ? removerRecuo(dados.codigo) : null,
             imagem: dados.imagem ?? null,
-            linguagem: nivel.linguagem,
+            linguagem: dados.linguagem ?? nivel.linguagem,
             explicacao: dados.explicacao ?? '',
             moedas: Number(dados.moedas ?? moedasPadrao) || 0,
             opcoes: [],
@@ -242,6 +410,9 @@
         };
 
         if (!versao.pergunta) erros.push(`${rotulo}: falta a pergunta ou a afirmação.`);
+        if (versao.codigo && !REGRAS_DE_REALCE[versao.linguagem]) {
+            erros.push(`${rotulo}: a linguagem "${versao.linguagem}" não existe. Use ${Object.keys(REGRAS_DE_REALCE).join(', ')}.`);
+        }
 
         if (tipo.formato === 'linha') {
             versao.resposta = Number(dados.linha);
@@ -270,7 +441,11 @@
         return versao;
     }
 
-    /* ═════════ 4. TEMA ═════════ */
+    // #endregion
+
+    //==============================================================
+    // #region 5. Tema
+    //==============================================================
 
     function aplicarTema(configuracao) {
         const raiz = document.documentElement;
@@ -286,7 +461,8 @@
         document.title = site.titulo;
         for (const elemento of buscarTodos('[data-titulo]')) elemento.textContent = site.titulo;
         for (const elemento of buscarTodos('[data-subtitulo]')) elemento.textContent = site.subtitulo;
-        for (const elemento of buscarTodos('[data-fantasma]')) elemento.src = FANTASMA;
+        for (const elemento of buscarTodos('[data-cena-caixa]')) elemento.innerHTML = criarCenaDaCaixa();
+        preencherIcones();
         buscar('[data-iniciar]').textContent = site.botaoIniciar;
         for (const espaco of buscarTodos('[data-marca]')) preencherMarca(espaco, site);
 
@@ -334,7 +510,11 @@
         }));
     }
 
-    /* ═════════ 5. SONS E EFEITOS ═════════ */
+    // #endregion
+
+    //==============================================================
+    // #region 6. Sons e efeitos
+    //==============================================================
 
     function sintetizarGrito(contexto, volume, velocidade) {
         const inicio = contexto.currentTime;
@@ -484,8 +664,9 @@
         async mostrarJumpscare() {
             if (!this.jumpscare.ativo) return;
             const duracao = limitarDuracao(this.jumpscare.duracao);
-            const imagem = criarElemento('img', { src: this.imagemDoSusto, alt: '', class: this.jumpscare.imagemPixelada ? 'pixelada' : null });
-            imagem.addEventListener('error', () => { imagem.src = FANTASMA; imagem.classList.add('pixelada'); }, { once: true });
+            const classe = this.jumpscare.imagemPixelada ? 'susto__imagem susto__imagem--pixelada' : 'susto__imagem';
+            const imagem = criarElemento('img', { src: this.imagemDoSusto, alt: '', class: classe });
+            imagem.addEventListener('error', () => { imagem.src = FANTASMA; imagem.classList.add('susto__imagem--pixelada'); }, { once: true });
             const fundo = criarElemento('div', { class: this.jumpscare.flashVermelho ? 'susto susto--flash' : 'susto', 'aria-hidden': 'true' }, imagem);
             fundo.style.setProperty('--duracao', `${duracao}ms`);
             fundo.style.setProperty('--tremor', `${this.jumpscare.tremor}px`);
@@ -497,8 +678,12 @@
         }
     }
 
-    /* ═════════ 6. RESPOSTAS ═════════
-       As duas classes têm os mesmos métodos, então a janela usa qualquer uma igual. */
+    // #endregion
+
+    //==============================================================
+    // #region 7. Respostas
+    //==============================================================
+    // As duas classes têm os mesmos métodos, então a janela usa qualquer uma igual.
 
     class RespostaPorLinha {
         constructor(versao) {
@@ -588,7 +773,11 @@
         }
     }
 
-    /* ═════════ 7. JANELA DO DESAFIO ═════════ */
+    // #endregion
+
+    //==============================================================
+    // #region 8. Janela do desafio
+    //==============================================================
 
     class JanelaDoDesafio {
         constructor(configuracao, efeitos) {
@@ -645,7 +834,7 @@
             this.elemento.style.setProperty('--tipo', desafio.tipo.cor);
             this.partes.tipo.textContent = `${desafio.tipo.icone} ${desafio.tipo.nome}`;
             this.partes.nivel.textContent = nivel.nome;
-            this.partes.moedas.textContent = `🪙 ${formatarMoedas(versao.moedas)}`;
+            this.partes.moedas.textContent = formatarMoedas(versao.moedas);
             this.partes.pergunta.textContent = versao.pergunta;
             this.partes.pergunta.classList.toggle('pergunta--afirmacao', versao.formato === 'verdadeiroOuFalso');
 
@@ -729,7 +918,7 @@
 
             const titulo = resultado.acertou ? `${acerto.mensagem} +${formatarMoedas(resultado.moedas)} coins` : jumpscare.mensagem;
             const detalhes = [];
-            if (!resultado.acertou && revelar) detalhes.push(`Resposta: ${this.resposta.textoDaResposta()} -> `);
+            if (!resultado.acertou && revelar) detalhes.push(`Resposta: ${this.resposta.textoDaResposta()}.`);
             if (rodada.mostrarExplicacao && resultado.versao.explicacao) detalhes.push(resultado.versao.explicacao);
             this.mostrarAviso(resultado.acertou ? 'acerto' : 'erro', titulo, detalhes.join(' '));
             this.partes.botao.textContent = this.ehOUltimo ? 'Ver resultado' : 'Voltar às cartas';
@@ -753,7 +942,11 @@
         }
     }
 
-    /* ═════════ 8. CARTAS E TABULEIRO ═════════ */
+    // #endregion
+
+    //==============================================================
+    // #region 9. Cartas e tabuleiro
+    //==============================================================
 
     class Carta {
         constructor(desafio, versoColorido) {
@@ -865,7 +1058,11 @@
         }
     }
 
-    /* ═════════ 9. RODADA ═════════ */
+    // #endregion
+
+    //==============================================================
+    // #region 10. Rodada
+    //==============================================================
 
     class Rodada {
         constructor() {
@@ -902,13 +1099,17 @@
         }
     }
 
-    /* ═════════ 10. SELETORES ═════════ */
+    // #endregion
+
+    //==============================================================
+    // #region 11. Seletores
+    //==============================================================
 
     class SeletorDeNivel {
         constructor(espaco, niveis, aoEscolher) {
             this.botoes = niveis.map((nivel) => {
                 const botao = criarElemento('button', { class: 'seletor__opcao', type: 'button', role: 'radio' },
-                    criarElemento('strong', {}, nivel.nome), criarElemento('small', {}, nivel.detalhe));
+                    criarElemento('strong', {}, nivel.nome), nivel.detalhe ? criarElemento('small', {}, nivel.detalhe) : null);
                 botao.dataset.nivel = nivel.id;
                 botao.addEventListener('click', () => aoEscolher(nivel));
                 return botao;
@@ -940,7 +1141,11 @@
         }
     }
 
-    /* ═════════ 11. JOGO ═════════ */
+    // #endregion
+
+    //==============================================================
+    // #region 12. Jogo
+    //==============================================================
 
     class Jogo {
         constructor(configuracao) {
@@ -1035,9 +1240,9 @@
             buscar('[data-progresso]').textContent = terminou
                 ? 'Rodada concluída'
                 : `Desafio ${rodada.respondidos() + 1} de ${rodada.totalDeDesafios}`;
-            buscar('[data-moedas]').textContent = `🪙 Coins: ${formatarMoedas(rodada.moedas())}`;
+            buscar('[data-moedas]').textContent = formatarMoedas(rodada.moedas());
             buscar('[data-ver-resultado]').hidden = !terminou;
-            buscar('.tela-cartas').classList.toggle('tela-cartas--concluida', terminou);
+            buscar('[data-tela="cartas"]').classList.toggle('tela-cartas--concluida', terminou);
         }
 
         mostrarResultado(comemorar) {
@@ -1069,6 +1274,8 @@
             return item;
         }
     }
+
+    // #endregion
 
     new Jogo(configuracao);
 })();
