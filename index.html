@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#150E22">
+    <title>Halloween Mystery Box</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎃</text></svg>">
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+
+<body>
+
+    <!-- ═════════ TELA DE INÍCIO ═════════ -->
+    <section class="tela tela-inicio" data-tela="inicio">
+        <div class="inicio">
+            <div class="marca" data-marca></div>
+            <img class="inicio__fantasma" data-fantasma alt="">
+            <h1 class="inicio__titulo" data-titulo></h1>
+            <p class="inicio__subtitulo" data-subtitulo></p>
+
+            <div class="painel">
+                <div class="painel__linha">
+                    <span class="painel__rotulo">Nível</span>
+                    <div data-seletor-nivel></div>
+                </div>
+                <div class="painel__linha">
+                    <span class="painel__rotulo" id="rotulo-quantidade">Quantos desafios?</span>
+                    <div class="contador" role="group" aria-labelledby="rotulo-quantidade">
+                        <button class="botao botao--icone" type="button" data-diminuir
+                            aria-label="Um desafio a menos">−</button>
+                        <output class="contador__valor" data-quantidade aria-live="polite">3</output>
+                        <button class="botao botao--icone" type="button" data-aumentar
+                            aria-label="Um desafio a mais">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="aviso aviso--alerta" data-erros hidden></div>
+
+            <button class="botao botao--principal botao--grande botao--iniciar" type="button" data-iniciar></button>
+        </div>
+    </section>
+
+    <!-- ═════════ TELA DAS CARTAS ═════════ -->
+    <section class="tela tela-cartas" data-tela="cartas" hidden>
+        <header class="barra">
+            <div class="marca marca--pequena" data-marca></div>
+            <div class="placar-ao-vivo">
+                <span data-progresso></span>
+                <span class="placar-ao-vivo__moedas" data-moedas></span>
+            </div>
+            <div class="barra__acoes">
+                <div data-seletor-nivel></div>
+                <button class="botao botao--contorno" type="button" data-embaralhar aria-label="Embaralhar cartas">
+                    <span aria-hidden="true">🔀</span><span class="botao__texto">Embaralhar</span>
+                </button>
+                <button class="botao botao--principal" type="button" data-ver-resultado hidden>Ver resultado</button>
+            </div>
+        </header>
+        <main class="area-das-cartas">
+            <div class="tabuleiro" data-tabuleiro></div>
+        </main>
+        <footer class="legenda" data-legenda></footer>
+    </section>
+
+    <!-- ═════════ TELA DE RESULTADO ═════════ -->
+    <section class="tela tela-resultado" data-tela="resultado" hidden>
+        <div class="resultado">
+            <h2 class="resultado__titulo">Fim da Mystery Box!</h2>
+
+            <div class="placar">
+                <div class="placar__item placar__item--acerto"><strong data-acertos>0</strong><span
+                        data-acertos-rotulo>acertos</span></div>
+                <div class="placar__item placar__item--erro"><strong data-erros-total>0</strong><span
+                        data-erros-rotulo>erros</span></div>
+            </div>
+
+            <p class="resultado__moedas" data-bloco-moedas><span aria-hidden="true">🪙</span> <strong
+                    data-total-moedas>0</strong> coins</p>
+
+            <p class="premio" data-premio hidden></p>
+
+            <ul class="resultado__lista" data-lista-resultados></ul>
+
+            <div class="resultado__acoes">
+                <button class="botao botao--contorno" type="button" data-rever-cartas>Ver cartas</button>
+                <button class="botao botao--principal" type="button" data-nova-rodada>Nova rodada</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═════════ JANELA DO DESAFIO ═════════ -->
+    <dialog class="janela" data-janela aria-labelledby="janela-tipo">
+        <div class="janela__barra">
+            <span class="etiqueta etiqueta--tipo" id="janela-tipo" data-janela-tipo></span>
+            <span class="etiqueta" data-janela-nivel></span>
+            <span class="etiqueta etiqueta--moedas" data-janela-moedas></span>
+            <button class="botao botao--icone janela__fechar" type="button" data-janela-fechar
+                aria-label="Fechar desafio">✕</button>
+        </div>
+        <form class="janela__corpo" data-janela-formulario tabindex="-1" novalidate>
+            <div class="janela__conteudo">
+                <h2 class="pergunta" data-janela-pergunta></h2>
+                <div data-janela-codigo></div>
+                <div data-janela-resposta></div>
+                <div class="aviso" data-janela-aviso aria-live="polite" hidden></div>
+                <button class="botao botao--principal botao--grande" type="submit" data-janela-botao>Verificar</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- ═════════ MODELO DE CARTA ═════════ -->
+    <template id="modelo-carta">
+        <button class="carta" type="button">
+            <span class="carta__miolo">
+                <span class="carta__face carta__verso">
+                    <span class="carta__interrogacao" aria-hidden="true">?</span>
+                    <span class="carta__nome" data-carta-nome-verso></span>
+                </span>
+                <span class="carta__face carta__frente">
+                    <span class="carta__icone" data-carta-icone aria-hidden="true"></span>
+                    <span class="carta__nome" data-carta-nome-frente></span>
+                    <span class="carta__selo" data-carta-selo></span>
+                </span>
+            </span>
+        </button>
+    </template>
+
+    <script src="js/configuracao.js"></script>
+    <script src="js/aplicacao.js"></script>
+</body>
+
+</html>
+
+
+
+

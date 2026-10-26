@@ -1,0 +1,11 @@
+Coloque aqui os arquivos do site (os nomes podem mudar no js/config.js):
+
+    logo.png        → logotipo do curso (CONFIG.site.logo)
+    fantasma.png    → imagem do jumpscare (CONFIG.jumpscare.imagem)
+    grito.mp3       → som do jumpscare (CONFIG.jumpscare.som)
+    acerto.mp3      → som do acerto (CONFIG.acerto.som)
+    desafios/       → imagens de código, se usar imagem('assets/desafios/...')
+
+
+Se algum arquivo faltar, o site usa o padrão: texto no lugar do logo,
+fantasma em pixel art e sons gerados pelo próprio navegador.
