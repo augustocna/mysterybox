@@ -1,0 +1,35 @@
+HALLOWEEN MYSTERY BOX
+=====================
+
+Para usar: abra o index.html no navegador. Funciona sem internet
+(as fontes do Google só carregam quando há conexão) e no GitHub Pages.
+
+
+ONDE MEXER
+----------
+    js/desafios.js        os desafios, com o passo a passo para criar novos
+    js/configuracao.js    níveis, regras da rodada, visual, sons e textos
+    css/variaveis.css     cores, fontes e tamanhos
+    assets/               logo, imagens e sons
+
+Se algo estiver errado, a tela de início mostra o problema e onde corrigir.
+
+
+O RESTO (não precisa editar)
+----------------------------
+    index.html            estrutura das três telas, da janela e da carta
+    css/estilo.css        aparência de cada parte do site
+
+    js/sistema/           o funcionamento, dividido por assunto:
+        base.js           funções de apoio usadas por todos
+        desenhos.js       pixel art: ícones, fantasma e a cena da caixa
+        codigo.js         cores e numeração do código dos desafios
+        preparacao.js     valores padrão e conferência da configuração e dos desafios
+        tema.js           aplica visual e textos da configuração na página
+        efeitos.js        sons, chuva de doces e jumpscare
+        janela.js         a janela do desafio e as formas de responder
+        tabuleiro.js      as cartas, o tamanho delas e o embaralhar
+        jogo.js           o fluxo do jogo; é o último a carregar e dá a partida
+
+A ordem dos <script> no index.html importa: cada arquivo usa o que os
+anteriores entregaram.

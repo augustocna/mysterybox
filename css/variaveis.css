@@ -1,0 +1,149 @@
+/* =========================================================
+   HALLOWEEN MYSTERY BOX · variáveis de estilo
+   Cores, fontes, tamanhos e tempos do site.
+   Mude aqui, ou em configuracao.visual.variaveis (que tem prioridade).
+
+   Sumário
+   1. Cores
+   2. Fontes
+   3. Formas e espaços
+   4. Movimento
+   5. Modo pixel art             (configuracao.visual.pixelArt)
+   6. Animação em passos         (configuracao.visual.animacaoEmPassos)
+   ========================================================= */
+
+:root {
+    color-scheme: dark;
+
+    /* ============================================================ */
+    /* #region 1. Cores */
+    /* ============================================================ */
+
+    /* Marca (cores do curso) */
+    --cor-marca: #E2001A;
+    --cor-marca-escura: #9E0012;
+    --cor-marca-texto: #FFFFFF;
+
+    /* Noite */
+    --cor-fundo: #150E22;
+    --cor-fundo-claro: #22173A;
+    --cor-superficie: #2A1E44;
+    --cor-superficie-clara: #382A5A;
+    --cor-borda: #4A3A72;
+    --cor-texto: #F4EEE3;
+    --cor-texto-suave: #BEB2D8;
+    --cor-texto-sobre-cor: #150E22;          /* texto em cima de fundos coloridos */
+
+    /* Halloween */
+    --cor-abobora: #FF8A1F;
+    --cor-abobora-escura: #C2560C;
+    --cor-lua: #FFE8A3;
+    --cor-moeda: #FFD23F;
+    --cor-moeda-borda: #9E5A00;
+    --cor-moeda-sombra: #E09A00;
+    --cor-acerto: #8BE04E;
+    --cor-erro: #FF3B4E;
+    --cor-estrela: rgb(255 255 255 / .75);
+    --cor-verso-igual: var(--cor-marca);     /* cartas fechadas quando versoDasCartas = 'igual' */
+
+    /* Código */
+    --cor-codigo-fundo: #0E0918;
+    --cor-codigo-texto: #ECE6F7;
+    --cor-codigo-numero-da-linha: #6E5F92;
+    --cor-realce-palavra: #FF8A1F;
+    --cor-realce-texto: #8BE04E;
+    --cor-realce-numero: #FFE8A3;
+    --cor-realce-comentario: #7D6FA3;
+    --cor-realce-etiqueta: #B57CFF;
+
+    /* #endregion */
+
+    /* ============================================================ */
+    /* #region 2. Fontes */
+    /* ============================================================ */
+    /* Sempre com alternativas: sem internet, o navegador usa as do sistema. */
+    --fonte-texto: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --fonte-titulo: "Creepster", "Nunito", Impact, "Arial Black", system-ui, sans-serif;
+    --fonte-codigo: ui-monospace, "Cascadia Code", "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+    --fonte-pixel: "Press Start 2P", ui-monospace, "Courier New", monospace;
+    --tamanho-fonte-pixel: clamp(.55rem, 2.3vw, .72rem);
+
+    /* #endregion */
+
+    /* ============================================================ */
+    /* #region 3. Formas e espaços */
+    /* ============================================================ */
+    --raio: 18px;
+    --raio-pequeno: 10px;
+    --raio-pilula: 999px;
+    --sombra: 0 10px 30px rgb(0 0 0 / .45);
+    --espaco: clamp(.5rem, 2.4vw, 1rem);
+    --espaco-duplo: calc(var(--espaco) * 2);
+    --margem-da-janela: clamp(0px, 3vw, 28px);
+    --altura-do-logo: clamp(28px, 7vw, 44px);
+    --tamanho-da-lua: clamp(1rem, 4.5vmin, 2.3rem);
+    --tamanho-da-cena: clamp(96px, 20vmin, 152px);
+    --altura-dos-controles: 2.75rem;         /* botões, seletor e etiquetas lado a lado têm a mesma altura */
+    --vao-entre-controles: .75rem;           /* espaço mínimo entre controles vizinhos */
+    --tamanho-do-icone: 1rem;                /* 16px: cada pixel do desenho 8x8 vira 2px */
+    --proporcao-da-carta: 3 / 4;             /* largura / altura (configuracao.cartas.proporcao) */
+    --tamanho-do-pixel: 4px;                 /* espessura da borda no modo pixel art */
+    --folga-da-borda-pixel: 0px;             /* espaço extra para a borda em pixel, que fica do lado de fora */
+
+    /* #endregion */
+
+    /* ============================================================ */
+    /* #region 4. Movimento */
+    /* ============================================================ */
+    /* As durações vêm de configuracao.animacoes; estes valores só valem se ela faltar. */
+    --duracao-virar-carta: 320ms;
+    --duracao-abrir-desafio: 260ms;
+    --duracao-embaralhar: 650ms;
+    --duracao-chuva-de-doces: 950ms;
+    --duracao-trocar-tela: 250ms;
+    --duracao-rapida: 140ms;
+    --duracao-cena: 5s;                      /* ciclo da cena da tela de início (configuracao.telaDeInicio) */
+
+    /* Curvas de movimento: fluidas por padrão */
+    --suavizacao: cubic-bezier(.2, .8, .2, 1);
+    --suavizacao-do-embaralhar: cubic-bezier(.5, 0, .2, 1);
+    --suavizacao-dos-doces: linear;
+    --suavizacao-do-susto: cubic-bezier(.2, 1.4, .4, 1);
+
+    /* #endregion */
+}
+
+/* A cor da borda em pixel vale só para o elemento que a define.
+   Sem isso, a cor da janela "vazaria" para todos os botões de dentro dela. */
+@property --cor-da-borda-pixel {
+    syntax: "*";
+    inherits: false;
+}
+
+/* ============================================================ */
+/* #region 5. Modo pixel art */
+/* ============================================================ */
+.pixel-art {
+    --raio: 0;
+    --raio-pequeno: 0;
+    --raio-pilula: 0;
+    --fonte-titulo: var(--fonte-pixel);
+    --folga-da-borda-pixel: var(--tamanho-do-pixel);
+    --vao-entre-controles: calc(.75rem + 2 * var(--tamanho-do-pixel));
+}
+
+/* #endregion */
+
+/* ============================================================ */
+/* #region 6. Animação em passos */
+/* ============================================================ */
+/* Movimento "travadinho", como nos videogames antigos. Combina com o pixel art,
+   mas é independente dele. */
+.animacao-em-passos {
+    --suavizacao: steps(6, end);
+    --suavizacao-do-embaralhar: steps(10, end);
+    --suavizacao-dos-doces: steps(3, end);
+    --suavizacao-do-susto: steps(8, end);
+}
+
+/* #endregion */

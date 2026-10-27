@@ -8,6 +8,7 @@
     <title>Halloween Mystery Box</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎃</text></svg>">
+    <link rel="stylesheet" href="css/variaveis.css">
     <link rel="stylesheet" href="css/estilo.css">
 </head>
 
@@ -25,16 +26,16 @@
 
             <div class="painel">
                 <div class="painel__linha">
-                    <span class="painel__rotulo">Nível</span>
+                    <span class="painel__rotulo" data-texto="nivel">Nível</span>
                     <div data-seletor-nivel></div>
                 </div>
                 <div class="painel__linha">
-                    <span class="painel__rotulo" id="rotulo-quantidade">Quantos desafios?</span>
+                    <span class="painel__rotulo" id="rotulo-quantidade" data-texto="quantidadeDeDesafios">Quantos desafios?</span>
                     <div class="contador" role="group" aria-labelledby="rotulo-quantidade">
-                        <button class="botao botao--icone" type="button" data-diminuir
+                        <button class="botao botao--icone botao--contorno" type="button" data-diminuir
                             aria-label="Um desafio a menos">−</button>
                         <output class="contador__valor" data-quantidade aria-live="polite">3</output>
-                        <button class="botao botao--icone" type="button" data-aumentar
+                        <button class="botao botao--icone botao--contorno" type="button" data-aumentar
                             aria-label="Um desafio a mais">+</button>
                     </div>
                 </div>
@@ -57,16 +58,16 @@
                 <span class="etiqueta" data-progresso></span>
                 <span class="etiqueta etiqueta--moedas">
                     <span class="icone" data-icone="moeda"></span>
-                    <span class="etiqueta__rotulo">Coins:</span>
+                    <span class="etiqueta__rotulo" data-texto="rotuloDasMoedas">Coins:</span>
                     <span data-moedas>0</span>
                 </span>
             </div>
             <div class="barra__acoes">
                 <div data-seletor-nivel></div>
                 <button class="botao botao--contorno" type="button" data-embaralhar aria-label="Embaralhar cartas">
-                    <span aria-hidden="true">🔀</span><span class="botao__texto">Embaralhar</span>
+                    <span aria-hidden="true">🔀</span><span class="botao__texto" data-texto="embaralhar">Embaralhar</span>
                 </button>
-                <button class="botao botao--principal" type="button" data-ver-resultado hidden>Ver resultado</button>
+                <button class="botao botao--principal" type="button" data-ver-resultado hidden data-texto="verResultado">Ver resultado</button>
             </div>
         </header>
         <main class="area-das-cartas">
@@ -81,7 +82,7 @@
     <!-- ============================================================ -->
     <section class="tela tela-resultado" data-tela="resultado" hidden>
         <div class="resultado">
-            <h2 class="resultado__titulo">Fim da Mystery Box!</h2>
+            <h2 class="resultado__titulo" data-texto="tituloDoResultado">Fim da Mystery Box!</h2>
 
             <div class="placar">
                 <div class="placar__item placar__item--acerto">
@@ -93,7 +94,7 @@
             </div>
 
             <p class="resultado__moedas" data-bloco-moedas>
-                <span class="icone" data-icone="moeda"></span> <strong data-total-moedas>0</strong> coins
+                <span class="icone" data-icone="moeda"></span> <strong data-total-moedas>0</strong> <span data-texto="nomeDasMoedas">coins</span>
             </p>
 
             <p class="premio" data-premio hidden></p>
@@ -101,8 +102,8 @@
             <ul class="resultado__lista" data-lista-resultados></ul>
 
             <div class="resultado__acoes">
-                <button class="botao botao--contorno" type="button" data-rever-cartas>Ver cartas</button>
-                <button class="botao botao--principal" type="button" data-nova-rodada>Nova rodada</button>
+                <button class="botao botao--contorno" type="button" data-rever-cartas data-texto="verCartas">Ver cartas</button>
+                <button class="botao botao--principal" type="button" data-nova-rodada data-texto="novaRodada">Nova rodada</button>
             </div>
         </div>
     </section>
@@ -158,8 +159,24 @@
     </template>
     <!-- #endregion -->
 
+    <!-- ============================================================ -->
+    <!-- #region Scripts -->
+    <!-- ============================================================ -->
+    <!-- A ordem importa: primeiro o que você edita, depois o sistema.
+         Cada arquivo do sistema usa o que os anteriores entregaram; jogo.js dá a partida. -->
     <script src="js/configuracao.js"></script>
-    <script src="js/aplicacao.js"></script>
+    <script src="js/desafios.js"></script>
+
+    <script src="js/sistema/base.js"></script>
+    <script src="js/sistema/desenhos.js"></script>
+    <script src="js/sistema/codigo.js"></script>
+    <script src="js/sistema/preparacao.js"></script>
+    <script src="js/sistema/tema.js"></script>
+    <script src="js/sistema/efeitos.js"></script>
+    <script src="js/sistema/janela.js"></script>
+    <script src="js/sistema/tabuleiro.js"></script>
+    <script src="js/sistema/jogo.js"></script>
+    <!-- #endregion -->
 </body>
 
 </html>

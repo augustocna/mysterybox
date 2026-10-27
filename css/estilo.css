@@ -1,117 +1,24 @@
 /* =========================================================
    HALLOWEEN MYSTERY BOX · estilos
-   Personalize pelas variáveis do :root
-   (ou por configuracao.visual.variaveis, que tem prioridade).
+   Cores, fontes e tamanhos ficam em css/variaveis.css.
 
    Nomes das classes no padrão BEM:
      bloco             .carta
      bloco__elemento   .carta__nome     (parte que só existe dentro do bloco)
      bloco--variacao   .carta--virada   (estado ou versão do bloco)
    Cada seção é um #region: o VS Code dobra e mostra o nome no minimapa.
+
+   Sumário
+    1. Base                 7. Janela do desafio
+    2. Componentes          8. Respostas
+    3. Tela de início       9. Efeitos
+    4. Tela das cartas     10. Animações
+    5. Cartas              11. Pixel art (detalhes)
+    6. Tela de resultado   12. Telas pequenas e acessibilidade
    ========================================================= */
 
 /* ============================================================ */
-/* #region 1. Variáveis */
-/* ============================================================ */
-:root {
-    color-scheme: dark;
-
-    /* Marca (cores do curso) */
-    --cor-marca: #E2001A;
-    --cor-marca-escura: #9E0012;
-    --cor-marca-texto: #FFFFFF;
-
-    /* Noite */
-    --cor-fundo: #150E22;
-    --cor-fundo-claro: #22173A;
-    --cor-superficie: #2A1E44;
-    --cor-superficie-clara: #382A5A;
-    --cor-borda: #4A3A72;
-    --cor-texto: #F4EEE3;
-    --cor-texto-suave: #BEB2D8;
-    --cor-texto-sobre-cor: #150E22;
-
-    /* Halloween */
-    --cor-abobora: #FF8A1F;
-    --cor-abobora-escura: #C2560C;
-    --cor-lua: #FFE8A3;
-    --cor-moeda: #FFD23F;
-    --cor-moeda-borda: #9E5A00;
-    --cor-moeda-sombra: #E09A00;
-    --cor-acerto: #8BE04E;
-    --cor-erro: #FF3B4E;
-    --cor-estrela: rgb(255 255 255 / .75);
-
-    /* Código */
-    --cor-codigo-fundo: #0E0918;
-    --cor-codigo-texto: #ECE6F7;
-    --cor-codigo-numero-da-linha: #6E5F92;
-    --cor-realce-palavra: #FF8A1F;
-    --cor-realce-texto: #8BE04E;
-    --cor-realce-numero: #FFE8A3;
-    --cor-realce-comentario: #7D6FA3;
-    --cor-realce-etiqueta: #B57CFF;
-
-    /* Fontes (sempre com alternativas para funcionar sem internet) */
-    --fonte-texto: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    --fonte-titulo: "Creepster", "Nunito", Impact, "Arial Black", system-ui, sans-serif;
-    --fonte-codigo: ui-monospace, "Cascadia Code", "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
-    --fonte-pixel: "Press Start 2P", ui-monospace, "Courier New", monospace;
-    --tamanho-fonte-pixel: clamp(.55rem, 2.3vw, .72rem);
-
-    /* Formas e espaços */
-    --raio: 18px;
-    --raio-pequeno: 10px;
-    --raio-pilula: 999px;
-    --sombra: 0 10px 30px rgb(0 0 0 / .45);
-    --espaco: clamp(.5rem, 2.4vw, 1rem);
-    --espaco-duplo: calc(var(--espaco) * 2);
-    --margem-da-janela: clamp(0px, 3vw, 28px);
-    --altura-do-logo: clamp(28px, 7vw, 44px);
-    --tamanho-da-lua: clamp(1rem, 4.5vmin, 2.3rem);
-    --tamanho-do-pixel: 4px;
-    --altura-dos-controles: 2.75rem;               /* botões, seletor e etiquetas lado a lado têm a mesma altura */
-    --vao-entre-controles: .75rem;                 /* espaço mínimo entre controles vizinhos */
-    --tamanho-do-icone: 1rem;                      /* 16px: cada pixel do desenho 8x8 vira 2px */
-    --tamanho-da-cena: clamp(96px, 20vmin, 152px);
-    --cor-verso-igual: var(--cor-marca);           /* cor das cartas fechadas quando versoDasCartas = 'igual' */
-
-    /* Durações (configuracao.animacoes sobrescreve) */
-    --duracao-virar-carta: 320ms;
-    --duracao-abrir-desafio: 260ms;
-    --duracao-embaralhar: 650ms;
-    --duracao-chuva-de-doces: 950ms;
-    --duracao-trocar-tela: 250ms;
-    --duracao-rapida: 140ms;
-    --duracao-cena: 5s;                            /* ciclo do fantasma saindo da caixa */
-    --suavizacao: cubic-bezier(.2, .8, .2, 1);
-}
-
-/* A cor da borda em pixel vale só para o elemento que a define.
-   Sem isso, a cor da janela "vazava" para todos os botões de dentro. */
-@property --cor-da-borda-pixel {
-    syntax: "*";
-    inherits: false;
-}
-
-/* #endregion */
-
-/* ============================================================ */
-/* #region 2. Pixel art (variáveis) */
-/* ============================================================ */
-.pixel-art {
-    --raio: 0;
-    --raio-pequeno: 0;
-    --raio-pilula: 0;
-    --fonte-titulo: var(--fonte-pixel);
-    --suavizacao: steps(6, end);
-    --vao-entre-controles: calc(.75rem + 2 * var(--tamanho-do-pixel));   /* as bordas em pixel ficam do lado de fora */
-}
-
-/* #endregion */
-
-/* ============================================================ */
-/* #region 3. Base */
+/* #region 1. Base */
 /* ============================================================ */
 *,
 *::before,
@@ -183,7 +90,7 @@ output {
 /* #endregion */
 
 /* ============================================================ */
-/* #region 4. Componentes */
+/* #region 2. Componentes */
 /* ============================================================ */
 
 /* Marca */
@@ -288,16 +195,16 @@ output {
 
 /* Seletor de nível */
 .seletor {
+    --folga-do-seletor: 3px;
     display: inline-flex;
-    gap: 3px;
+    gap: var(--folga-do-seletor);
     height: var(--altura-dos-controles);
-    padding: 3px;
+    padding: var(--folga-do-seletor);
     max-width: 100%;
     border: 1px solid var(--cor-borda);
     border-radius: var(--raio-pequeno);
     background: var(--cor-superficie);
 }
-
 
 .seletor__opcao {
     flex: 1;
@@ -308,7 +215,7 @@ output {
     gap: .45em;
     padding: 0 .9em;
     border: 0;
-    border-radius: var(--raio-pilula);
+    border-radius: max(0px, calc(var(--raio-pequeno) - var(--folga-do-seletor)));   /* acompanha o canto do seletor */
     background: transparent;
     color: var(--cor-texto-suave);
     line-height: 1;
@@ -369,8 +276,6 @@ output {
     --cor-de-aviso: var(--cor-lua);
 }
 
-
-
 /* Ícones em pixel art (preenchidos pelo JS a partir de data-icone) */
 .icone {
     display: inline-block;
@@ -415,7 +320,7 @@ output {
 /* #endregion */
 
 /* ============================================================ */
-/* #region 5. Tela de início */
+/* #region 3. Tela de início */
 /* ============================================================ */
 .tela-inicio {
     display: grid;
@@ -500,6 +405,11 @@ output {
     color: var(--cor-texto-suave);
 }
 
+/* quando não cabe ao lado do rótulo, o controle desce e continua alinhado à direita */
+.painel__linha > :last-child {
+    margin-left: auto;
+}
+
 .contador {
     display: inline-flex;
     align-items: center;
@@ -524,7 +434,7 @@ output {
 /* #endregion */
 
 /* ============================================================ */
-/* #region 6. Tela das cartas */
+/* #region 4. Tela das cartas */
 /* ============================================================ */
 .tela-cartas {
     display: grid;
@@ -625,11 +535,11 @@ output {
 /* #endregion */
 
 /* ============================================================ */
-/* #region 7. Cartas */
+/* #region 5. Cartas */
 /* ============================================================ */
 .carta {
     position: relative;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: var(--proporcao-da-carta);
     padding: 0;
     border: 0;
     background: none;
@@ -748,7 +658,7 @@ output {
 /* #endregion */
 
 /* ============================================================ */
-/* #region 8. Tela de resultado */
+/* #region 6. Tela de resultado */
 /* ============================================================ */
 .tela-resultado {
     display: grid;
@@ -864,7 +774,7 @@ output {
 /* #endregion */
 
 /* ============================================================ */
-/* #region 9. Janela do desafio */
+/* #region 7. Janela do desafio */
 /* ============================================================ */
 .janela {
     position: fixed;
@@ -900,8 +810,8 @@ output {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
     gap: var(--vao-entre-controles);
-    padding: calc(.6rem + var(--tamanho-do-pixel)) calc(var(--espaco) + var(--tamanho-do-pixel));
-    padding-top: max(calc(.6rem + var(--tamanho-do-pixel)), env(safe-area-inset-top, 0));
+    padding: calc(.6rem + var(--folga-da-borda-pixel)) calc(var(--espaco) + var(--folga-da-borda-pixel));
+    padding-top: max(calc(.6rem + var(--folga-da-borda-pixel)), env(safe-area-inset-top, 0));
     border-bottom: 2px solid var(--tipo);
     background: var(--cor-superficie);
 }
@@ -973,7 +883,7 @@ output {
     counter-increment: numero-da-linha;
 }
 
-.linha-de-codigo>span {
+.linha-de-codigo > span {
     min-width: 0;
 }
 
@@ -1037,7 +947,7 @@ output {
 /* #endregion */
 
 /* ============================================================ */
-/* #region 10. Respostas */
+/* #region 8. Respostas */
 /* ============================================================ */
 .campo {
     display: flex;
@@ -1175,7 +1085,7 @@ output {
 /* #endregion */
 
 /* ============================================================ */
-/* #region 11. Efeitos */
+/* #region 9. Efeitos */
 /* ============================================================ */
 .doce {
     position: fixed;
@@ -1185,7 +1095,7 @@ output {
     pointer-events: none;
     font-size: var(--tamanho);
     line-height: 1;
-    animation: cair-doce var(--duracao) linear var(--atraso) both;
+    animation: cair-doce var(--duracao) var(--suavizacao-dos-doces) var(--atraso) both;
 }
 
 .susto {
@@ -1206,7 +1116,7 @@ output {
 .susto__imagem {
     width: min(80vw, 80vh);
     height: auto;
-    animation: aparecer-fantasma var(--duracao) cubic-bezier(.2, 1.4, .4, 1) both;
+    animation: aparecer-fantasma var(--duracao) var(--suavizacao-do-susto) both;
 }
 
 .susto__imagem--pixelada {
@@ -1220,7 +1130,7 @@ output {
 /* #endregion */
 
 /* ============================================================ */
-/* #region 12. Animações */
+/* #region 10. Animações */
 /* ============================================================ */
 @keyframes surgir {
     from {
@@ -1366,7 +1276,7 @@ output {
 /* #endregion */
 
 /* ============================================================ */
-/* #region 13. Pixel art (detalhes) */
+/* #region 11. Pixel art (detalhes) */
 /* ============================================================ */
 /* Bordas recortadas em "degrau" feitas com sombras. */
 .pixel-art .botao,
@@ -1425,8 +1335,8 @@ output {
 }
 
 .pixel-art .janela {
-    width: min(100% - 2 * var(--margem-da-janela) - 8px, 860px);
-    height: calc(100% - 2 * var(--margem-da-janela) - 8px);
+    width: min(100% - 2 * var(--margem-da-janela) - 2 * var(--folga-da-borda-pixel), 860px);
+    height: calc(100% - 2 * var(--margem-da-janela) - 2 * var(--folga-da-borda-pixel));
 }
 
 .pixel-art .tabuleiro {
@@ -1470,7 +1380,6 @@ output {
     font-weight: 400;
     font-size: var(--tamanho-fonte-pixel);
     line-height: 1.7;
-    
 }
 
 .pixel-art .botao--grande {
@@ -1509,14 +1418,10 @@ output {
     border-radius: 0;
 }
 
-.pixel-art .doce {
-    animation-timing-function: steps(3, end);
-}
-
 /* #endregion */
 
 /* ============================================================ */
-/* #region 14. Telas pequenas e acessibilidade */
+/* #region 12. Telas pequenas e acessibilidade */
 /* ============================================================ */
 @media (max-width: 380px) {
     .linha-de-codigo {
