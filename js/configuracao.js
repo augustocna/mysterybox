@@ -47,12 +47,14 @@ const configuracao = {
     // Ao criar um nível, todo desafio em js/desafios.js precisa ganhar uma versão com o id dele.
     niveis: [
         { id: 'ct2', nome: 'CT2', detalhe: '', linguagem: 'lua' },
+        { id: 'ct3', nome: 'CT3', detalhe: '', linguagem: 'cpp' },
         { id: 'cy1', nome: 'CY1', detalhe: '', linguagem: 'python' },
         { id: 'cy2', nome: 'CY2', detalhe: '', linguagem: 'web' },
     ],
     nivelInicial: 'ct2',                     // nível marcado ao abrir o site
 
     // #endregion
+
 
     //==========================================================
     // #region 3. Rodada

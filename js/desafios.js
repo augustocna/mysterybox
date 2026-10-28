@@ -85,6 +85,7 @@ const desafios = [
         moedas: 500,
 
         ct2: {
+            linguagem: 'lua',
             codigo: 
                 `
                 local doces = 10
@@ -96,6 +97,22 @@ const desafios = [
                 `,
             linha: 2,
             explicacao: 'Foi usado o = (que guarda um valor) no lugar do == (que compara).',
+        },
+
+        ct3: {
+            linguagem: 'cpp',
+            codigo: 
+                `
+                void setup() {
+                    Serial.begin(9600);
+                }
+                void loop {
+                    Serial.println("BOOOOOO!");
+                    delay(100);
+                }
+                `,
+            linha: 4,
+            explicacao: 'Falta os parênteses em void loop().',
         },
 
         cy1: {
@@ -150,6 +167,24 @@ const desafios = [
             explicacao: 'Faltou a vírgula depois do 6 para separar os dois valores do digitalWrite.',
         },
 
+        ct3: {
+            linguagem: 'cpp',
+            codigo: 
+                `
+                void setup() {
+                    int doces = 10;
+                    bool travessuras = (doces < 1);
+
+                    if(travessuras) {
+                        pinMode(6, OUTPUT);
+                        digitalWrite(6 HIGH);
+                    }
+                }
+                `,
+            linha: 7,
+            explicacao: 'Faltou a vírgula depois do 6 para separar os dois argumentos do digitalWrite.',
+        },
+
         cy1: {
             codigo: 
                 `
@@ -186,9 +221,10 @@ const desafios = [
     //==========================================================
     {
         tipo: 'saida',
-        moedas: 400,
+        moedas: 500,
 
         ct2: {
+            linguagem: 'lua',
             codigo: 
                 `
                 local fantasmas = 2
@@ -201,6 +237,29 @@ const desafios = [
             opcoes: ['3.98168', '10', '7'],
             correta: '10',
             explicacao: 'Na linha 5, a variável fantasmas passa a guardar o valor 10, e as contas de antes se perdem.',
+        },
+
+        ct3: {
+            linguagem: 'cpp',
+            codigo: 
+                `
+                void loop() {
+                    bool gostosuras = 1;
+                    bool travessuras = !gostosuras;
+
+                    Serial.begin(9600);
+
+                    if(travessuras) {
+                        Serial.println("Cade o doce?");
+                    }
+                    else {
+                        Serial.println("Doce doce doce.");
+                    }
+                }
+                `,
+            opcoes: ['Cade o doce?', 'Doce doce doce', '9600'],
+            correta: 'Doce doce doce',
+            explicacao: 'A variável "travessuras" guarda 0 (false), logo o bloco "if" da linha 7 não será executado, mas sim o else.',
         },
 
         cy1: {
@@ -238,22 +297,44 @@ const desafios = [
     //==========================================================
     {
         tipo: 'saida',
-        moedas: 400,
+        moedas: 500,
 
         ct2: {
             linguagem: 'cpp',
             codigo: 
+            `
+            int portaFantasma = 6;
+            void setup() {
+                pinMode(portaFantasma, OUTPUT);
+                Serial.begin(9600);
+                portaFantasma += 5;
+                Serial.println(portaFantasma);
+                }
+                `,
+                opcoes: ['6', '11', '9600'],
+                correta: '6',
+                explicacao: 'Na linha 5, Serial.println() mostra o valor da variável portaFantasma, que é 6.',
+            },
+            
+        ct3: {
+            linguagem: 'cpp',
+            codigo: 
                 `
                 int portaFantasma = 6;
+
                 void setup() {
                     pinMode(portaFantasma, OUTPUT);
+
                     Serial.begin(9600);
+
+                    portaFantasma *= 2;
+
                     Serial.println(portaFantasma);
                 }
                 `,
-            opcoes: ['6', 'OUTPUT', '9600'],
-            correta: '6',
-            explicacao: 'Na linha 5, Serial.println() mostra o valor da variável portaFantasma, que é 6.',
+            opcoes: ['6', '2', '12'],
+            correta: '12',
+            explicacao: 'Na linha 8, a variável portaFantasma passa a guardar o dobro do próprio valor e, em seguida, é impressa na linha 10.',
         },
 
         cy1: {
@@ -291,12 +372,18 @@ const desafios = [
     //==========================================================
     {
         tipo: 'verdadeiroOuFalso',
-        moedas: 300,
+        moedas: 500,
 
         ct2: {
             afirmacao: 'Uma variável é um espaço na memória do computador, com um nome, que guarda um valor, como um pote de doces com etiqueta.',
             resposta: true,
             explicacao: 'Em local doces = 10, o pote chamado doces guarda o valor 10.',
+        },
+
+        ct3: {
+            afirmacao: 'No Unity, um Rigidbody é um componente que permite que um objeto seja simulado como se estivesse sendo afetado por física. Isso inclui coisas como gravidade, massa e atrito.',
+            resposta: true,
+            explicacao: 'Rigid body também é um termo da física que chama-se corpo rígido.',
         },
 
         cy1: {
@@ -319,12 +406,18 @@ const desafios = [
     //==========================================================
     {
         tipo: 'verdadeiroOuFalso',
-        moedas: 300,
+        moedas: 500,
 
         ct2: {
             afirmacao: 'O comando if serve para executar um bloco de instruções apenas se uma condição for satisfeita.',
             resposta: true,
             explicacao: 'O if testa a condição: se ela for verdadeira, o bloco roda; se não, é pulado.',
+        },
+
+        ct3: {
+            afirmacao: 'A estrutura while serve para encerrar um bloco de repetição.',
+            resposta: false,
+            explicacao: 'A estrutura while serve para repetir um bloco de código enquanto uma condição for verdadeira, o comando break serve para encerrar um bloco de repetição',
         },
 
         cy1: {
