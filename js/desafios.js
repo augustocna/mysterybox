@@ -86,7 +86,7 @@ const desafios = [
 
         ct2: {
             linguagem: 'lua',
-            codigo: 
+            codigo:
                 `
                 local doces = 10
                 if doces = 10 then
@@ -101,7 +101,7 @@ const desafios = [
 
         ct3: {
             linguagem: 'cpp',
-            codigo: 
+            codigo:
                 `
                 void setup() {
                     Serial.begin(9600);
@@ -116,7 +116,7 @@ const desafios = [
         },
 
         cy1: {
-            codigo: 
+            codigo:
                 `
                 doces = 10
                 doces /= 2
@@ -128,7 +128,7 @@ const desafios = [
         },
 
         cy2: {
-            codigo: 
+            codigo:
                 `
                 <body>
                     <main class="conteiner">
@@ -153,7 +153,7 @@ const desafios = [
 
         ct2: {
             linguagem: 'cpp',
-            codigo: 
+            codigo:
                 `
                 int fantasma = analogRead(A1);
                 if (fantasma < 500) {
@@ -169,7 +169,7 @@ const desafios = [
 
         ct3: {
             linguagem: 'cpp',
-            codigo: 
+            codigo:
                 `
                 void setup() {
                     int doces = 10;
@@ -186,7 +186,7 @@ const desafios = [
         },
 
         cy1: {
-            codigo: 
+            codigo:
                 `
                 senha = "boo"
                 if senha = "boo":
@@ -199,7 +199,7 @@ const desafios = [
         },
 
         cy2: {
-            codigo: 
+            codigo:
                 `
                 let travessuras = 0;
                 function assustar() {
@@ -225,7 +225,7 @@ const desafios = [
 
         ct2: {
             linguagem: 'lua',
-            codigo: 
+            codigo:
                 `
                 local fantasmas = 2
                 fantasmas = fantasmas * 2
@@ -241,7 +241,7 @@ const desafios = [
 
         ct3: {
             linguagem: 'cpp',
-            codigo: 
+            codigo:
                 `
                 void loop() {
                     bool gostosuras = 1;
@@ -263,7 +263,7 @@ const desafios = [
         },
 
         cy1: {
-            codigo: 
+            codigo:
                 `
                 fantasmas = 2
                 fantasmas *= 3
@@ -277,7 +277,7 @@ const desafios = [
 
         cy2: {
             pergunta: 'No código abaixo, o que o alert mostra?',
-            codigo: 
+            codigo:
                 `
                 let doces = 3;
                 let fantasmas = "3";
@@ -301,24 +301,24 @@ const desafios = [
 
         ct2: {
             linguagem: 'cpp',
-            codigo: 
-            `
-            int portaFantasma = 6;
-            void setup() {
-                pinMode(portaFantasma, OUTPUT);
-                Serial.begin(9600);
-                portaFantasma += 5;
-                Serial.println(portaFantasma);
+            codigo:
+                `
+                int portaFantasma = 6;
+                void setup() {
+                    pinMode(portaFantasma, OUTPUT);
+                    Serial.begin(9600);
+                    portaFantasma += 5;
+                    Serial.println(portaFantasma);
                 }
                 `,
-                opcoes: ['6', '11', '9600'],
-                correta: '6',
-                explicacao: 'Na linha 5, Serial.println() mostra o valor da variável portaFantasma, que é 6.',
-            },
-            
+            opcoes: ['6', '5', '11'],
+            correta: '11',
+            explicacao: 'Na linha 6, Serial.println() mostra o valor da variável portaFantasma, que é 11.',
+        },
+
         ct3: {
             linguagem: 'cpp',
-            codigo: 
+            codigo:
                 `
                 int portaFantasma = 6;
 
@@ -338,7 +338,7 @@ const desafios = [
         },
 
         cy1: {
-            codigo: 
+            codigo:
                 `
                 doces = ['paçoca', 'chocolate', 'jujuba']
                 doces.sort()
@@ -351,7 +351,7 @@ const desafios = [
 
         cy2: {
             pergunta: 'O que o alert mostra?',
-            codigo: 
+            codigo:
                 `
                 let doces = 0;
                 for (let i = 1; i <= 3; i++) {
